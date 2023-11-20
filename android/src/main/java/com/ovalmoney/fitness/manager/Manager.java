@@ -485,6 +485,9 @@ public class Manager implements ActivityEventListener {
     private void processHeartRate(DataSet dataSet, WritableArray map) {
 
         for (DataPoint dp : dataSet.getDataPoints()) {
+            heartRateMap.putString("startDate", dateFormat.format(dp.getStartTime(TimeUnit.MILLISECONDS)));
+            heartRateMap.putString("endDate", dateFormat.format(dp.getEndTime(TimeUnit.MILLISECONDS)));
+            heartRateMap.putDouble("quantity",  dp.getValue(dp.getDataType().getFields().get(0)).asFloat());
             for(Field field : dp.getDataType().getFields()) {
                 WritableMap heartRateMap = Arguments.createMap();
                 heartRateMap.putString("startDate", dateFormat.format(dp.getStartTime(TimeUnit.MILLISECONDS)));
@@ -492,6 +495,10 @@ public class Manager implements ActivityEventListener {
                 heartRateMap.putDouble("quantity", dp.getValue(field).asFloat());
                 map.pushMap(heartRateMap);
             }
+                heartRateMap.putDouble(field.getName(), dp.getValue(field).asFloat());
+                }
+            map.pushMap(heartRateMap);
+
         }
     }
 
